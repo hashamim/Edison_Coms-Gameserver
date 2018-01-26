@@ -19,7 +19,7 @@ int hostConnection(char* portno){
 	getaddrinfo(NULL,portno,&hints,&res);
 	listen_sock_fd = socket(res->ai_family,res->ai_socktype,res->ai_protocol);
 	if(bind(listen_sock_fd,res->ai_addr,res->ai_addrlen) != 0 ){
-		fprintf(stderr,"Error binding to Port\n");
+		fprintf(stderr,"Error binding to Port: %s\n",strerror(errno));
 		return -1;
 	}
 	int yes =  1;

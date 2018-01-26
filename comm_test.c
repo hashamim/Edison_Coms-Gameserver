@@ -5,20 +5,26 @@
 #include "player_comm.h"
 #include <unistd.h>
 #include <stdio.h>
-
+#include <errno.h>
 #define SERVER "server"
 #define CLIENT "client"
 
 //usage: user ip(not used for player) port_number
 int main(int argc, char* argv[]){
+	if(argc != 4){
+		printf("Usage: ./comm_test [user] [ip] [port number]\n");
+		return 0;
+	}
 	if(strcmp(argv[1],CLIENT)==0){ //client code receives data
     							int recerr;
 		int base_sock_fd = connectToHost(argv[2],argv[3]);	
 		char msg = 'a';
 		while(1){
 			recerr = recv(base_sock_fd,&msg,1,0);
-			if(recerr <= 0)
-        break;
+			if(recerr <= 0){
+				printf("recv: %d errno: %d\n", recerr, errno);
+			       	break;
+			}
       printf("%d\n",msg);
 		}
 	}
