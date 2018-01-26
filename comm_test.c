@@ -32,8 +32,13 @@ int main(int argc, char* argv[]){
 
 		int player_sock_fd = hostConnection(argv[3]);	
 		char msg = 'a';
+		int senderr;
 		while(1){
-			send(player_sock_fd,&msg,1,0);
+			senderr = send(player_sock_fd,&msg,1,0);
+			if(senderr <= 0){
+				printf("send: %d errno: %d\n", senderr, errno);
+				break;
+			}
 			sleep(1);
 			msg++;
 		}
