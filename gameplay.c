@@ -36,6 +36,7 @@ int player_doubledamage[NUMPLAYERS];
 int numvictims;
 int victimpts = 0;
 int killerpts = 0;
+int victimskilled = 0;
 char msg;
 int action;
 int playerid;
@@ -58,10 +59,10 @@ i++;
 }
 player_numblocks[0] = 0;
 player_hp[0] = 3;
-numvictime = NUMPLAYERS - 1;
+numvictims = NUMPLAYERS - 1;
 gameplaying = 1;
 msg =0;
-
+victimskilled =0;
 }
 void reset_score()
 {
@@ -153,9 +154,12 @@ reset(); //reset game state
               }
               else
               {
+			victimskilled++;
                 numvictims--;
                 if (numvictims == 0) //all victims dead
                 {
+if(victimskilled == numvictims)
+{
                 printf("All victims have died\n");
                
                   gameplaying = 0;
@@ -172,6 +176,13 @@ reset(); //reset game state
 			reset();
 			reset_score();
 			sleep(10);
+}
+else
+{
+printf("No more victims in the round, starting new round in 10s\n");
+reset();
+sleep(10);
+}
                                   }
               }
             }
