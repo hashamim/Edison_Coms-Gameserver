@@ -1,4 +1,3 @@
-#include "game_server.h"
 #include "player_comm.h"
 #include <pthread.h>
 #include <time.h>
@@ -24,11 +23,34 @@
   1: tag
   2: escape
   3: shoot
-	4: revive
+  4: revive
 */
+
+struct player{
+	int webcam_socket_fd;
+	int imu_socket_fd;
+	char* webcam_ip;
+	char* imu_ip;
+};
+
+//player colors
+#define BLUE 0
+#define RED 1
+#define PURPLE 2
+#define GREEN 3
+
+//player actions
+#define BLOCK 0
+#define TAG 1
+#define ESCAPE 2
+#define SHOOT 3
+#define REVIVE 4
 
 #define NUMPLAYERS 3
 #define BUTTON 3
+struct player players[NUMPLAYERS];
+static char * player_colors[] = {"BLUE","RED","GREEN","YELLOW"};
+static char * player_actions[] = {"blocks","tags","escapes","shoots","revives"};
 int player_blocking[NUMPLAYERS];
 int player_numblocks[NUMPLAYERS];
 int player_hp[NUMPLAYERS];
@@ -51,8 +73,10 @@ void reset()
 int i = 0;
 while(i < NUMPLAYERS)
 {
+
 player_blocking[i] = 0;
-player_numblocks[i] = 1; //players start with 1 block;
+if(player_numblocks[i] == 0){
+player_numblocks[i] = 1;} //players start with 1 block
 player_doubledamage[i] = 0;
 player_hp[i] = 1;
 i++;
@@ -71,7 +95,7 @@ killerpts = 0;
 
 }
 
-  void playgame(int msg)
+void playgame(int msg)
 {
  action = getAction(msg);//extract action bits
     playerid = getPlayerId(msg);
@@ -116,13 +140,15 @@ printf("%d is out of blocks!\n", playerid);
 		player_doubledamage[playerid] = 0; 
 }		
             player_hp[targetid]--; //lose 1hp
-            printf("%d has lost hp\n", targetid);
+            printf("%d has lost hp, now has", targetid);
+		printf("%d hp\n", player_hp[targetid]);
             if (playerid == 0) //give pts
               {
               killerpts++;
 		 if(player_hp[playerid] < 3) //give killer hp back
 {
 			player_hp[playerid]++;
+printf("Killer gained 1hp back, now has %d hp\n", player_hp[0]);
 }
              printf("Killer got 1 pt. Killer pts: %d\n", killerpts);
               }
@@ -158,7 +184,7 @@ reset(); //reset game state
                 numvictims--;
                 if (numvictims == 0) //all victims dead
                 {
-if(victimskilled == numvictims)
+if(victimskilled == NUMPLAYERS - 1)
 {
                 printf("All victims have died\n");
                
@@ -200,26 +226,19 @@ sleep(10);
           if(numvictims == 0)
           {
           printf("All victims have escaped, starting new round in 10s\n");
-          int i = 0;
-           while (i < NUMPLAYERS)
-    {
-      player_blocking[i] = 0;
-      player_hp[i] = 1;
-      i++;
-    }
-    player_hp[0] = 3; //killer has 3 hp
-
-    numvictims = NUMPLAYERS - 1;
-     sleep(10);
+          reset();
+          sleep(10);
           }
      	break;
 	case 4: //reviving
 	if(player_hp[targetid] == 0 && targetid != 0) //target is not killer and is dead
 	{
-	player_hp[targetid] = 1; revive target;
+	player_hp[targetid] = 1; //revive target;
 	player_doubledamage[playerid] = 1; //give player double dmg
 	printf("%d has been revived!\n", targetid);
 	printf("%d has gained double damage on their next hit!\n", playerid);
+	numvictims++;
+	victimskilled--;
 	}
       };
 }
@@ -265,7 +284,7 @@ int main(int argc, char *argv[]){    //  ./gameplay  blue webcam ip  blue webcam
 
 	players[PURPLE].webcam_socket_fd = connectToHost(argv[9],argv[10]);
 printf("connected to ip: %s with portno %s \n", argv[9], argv[10]);
-	players[PURPLE],imt_socket_fc = connectToHost(argv[11],argv[12]);
+	players[PURPLE].imu_socket_fd = connectToHost(argv[11],argv[12]);
 printf("connected to ip: %s with portno %s\n",argv[11], argv[12]);
 printf("Connected!\n");
 
@@ -303,9 +322,9 @@ printf("Connected!\n");
         if(eof <= 0)
            break;
         printf("BLUE WEBCAM: %d\n", webcambuf[0]);
-	   if(getAction(int(webcambuf[0])) == 3)
+	   if(getAction((int ) webcambuf[0]) == 3)
 		{
-webcam = webcambut[0];
+webcam = webcambuf[0];
 break; //shoot
 }
   			poll(imupoll+BLUE,1,1000);
@@ -316,6 +335,8 @@ break; //shoot
           printf("BLUE IMU: %d\n", imubuf[0]);
   				webcam = webcambuf[0];
   				imu = imubuf[0];
+          if((webcam&15) == 3)
+          break; //shoot = 3
   				if((webcam &15) == (imu & 15))
   					break;
   			}			
@@ -330,7 +351,7 @@ while(i < 3)
 	if(i == 1)
         printf("RED WEBCAM: %d\n", webcambuf[0]);
 	else printf("PURPLE WEBCAM %d\n", webcambuf[0]);
-        if(getAction(int(webcambuf[0])) == 2)
+        if(getAction((int) webcambuf[0]) == 2)
         {
         webcam = webcambuf[0];
         break; //escape
@@ -346,7 +367,7 @@ while(i < 3)
   				webcam = webcambuf[0];
   				imu = imubuf[0];
 	    int temp = getAction((int)webcam);
-          if(temp == 2 || temp == 3)
+          if(temp == 2 || temp == 4)
           break;
   				if((webcam&15) == (imu&15))
   				break;
