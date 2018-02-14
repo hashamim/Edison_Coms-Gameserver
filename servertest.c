@@ -101,23 +101,24 @@ int main(int argc, char * argv[]){ //usage bluewebcamfdportno blueimufdportno re
 		switch(player){
 			case 'r':
 				msg |= REDMASK;
-				write(webcamfd[RED],&msg,1);
-				write(imufd[RED],&msg,1);
+				send(webcamfd[RED],&msg,1,0);
+				send(imufd[RED],&msg,1,0);
 				break;
 			case 'p':
 				msg |= PURPLEMASK;
-				write(webcamfd[PURPLE],&msg,1);
-				write(imufd[PURPLE],&msg,1);
+				send(webcamfd[PURPLE],&msg,1,0);
+				send(imufd[PURPLE],&msg,1,0);
 				break;
 			case 'g':
 				msg |= GREENMASK;
-
+				//send(webcamfd[GREEN],&msg,1,0);
+				//send(imufd[GREEN],&msg,1,0);
 				break;
 			case 'b':
 				msg |= BLUEMASK;
-        //printf("Hex: %x\n", msg);
-				send(webcamfd[BLUE],&msg,1);
-        send(imufd[BLUE],&msg,1);
+       				//printf("Hex: %x\n", msg);
+				send(webcamfd[BLUE],&msg,1,0);
+				send(imufd[BLUE],&msg,1,0);
 		}
 		
 		
