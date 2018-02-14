@@ -345,7 +345,7 @@ int main(int argc, char *argv[]){    //  ./gameplay  blue webcam ip  blue webcam
  //polling loop
   	while(1){	
    
-  		poll(webcampoll,2,0);
+  		poll(webcampoll,3,0);
   		if(webcampoll[BLUE].revents & POLLIN == POLLIN){
   			eof = recv(webcampoll[BLUE].fd,webcambuf,32,0);
         if(eof <= 0)
