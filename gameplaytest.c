@@ -297,21 +297,21 @@ int main(int argc, char *argv[]){    //  ./gameplay  blue webcam ip  blue webcam
     players[i].imu_socket_fd = connectToHost(players[i].imu_ip,&portbuf[0]);
   }
   */
-	players[BLUE].webcam_socket_fd = connectToHost(argv[1],argv[2]);
+  players[BLUE].webcam_socket_fd = connectToHost(argv[1],argv[2]);
   printf("connected to ip: %s with portno %s\n",argv[1], argv[2]);
   sleep(1);
-	players[BLUE].imu_socket_fd = connectToHost(argv[1],argv[3]);
- printf("connected to ip: %s with portno %s\n",argv[1], argv[3]);
- 	//players[RED].webcam_socket_fd = connectToHost(argv[5],argv[6]);
-  //printf("connected to ip: %s with portno %s\n",argv[5], argv[6]);
-  //sleep(1);
-	//players[RED].imu_socket_fd = connectToHost(argv[7],argv[8]);
- //printf("connected to ip: %s with portno %s\n",argv[7], argv[8]);
+  players[BLUE].imu_socket_fd = connectToHost(argv[1],argv[3]);
+  printf("connected to ip: %s with portno %s\n",argv[1], argv[3]);
+  players[RED].webcam_socket_fd = connectToHost(argv[5],argv[6]);
+  printf("connected to ip: %s with portno %s\n",argv[5], argv[6]);
+  sleep(1);
+  players[RED].imu_socket_fd = connectToHost(argv[7],argv[8]);
+  printf("connected to ip: %s with portno %s\n",argv[7], argv[8]);
 
-	//players[PURPLE].webcam_socket_fd = connectToHost(argv[9],argv[10]);
-  //printf("connected to ip: %s with portno %s \n", argv[9], argv[10]);
-	//players[PURPLE].imu_socket_fd = connectToHost(argv[11],argv[12]);
-  //printf("connected to ip: %s with portno %s\n",argv[11], argv[12]);
+  players[PURPLE].webcam_socket_fd = connectToHost(argv[9],argv[10]);
+  printf("connected to ip: %s with portno %s \n", argv[9], argv[10]);
+  players[PURPLE].imu_socket_fd = connectToHost(argv[11],argv[12]);
+  printf("connected to ip: %s with portno %s\n",argv[11], argv[12]);
   printf("Connected!\n");
   
 
