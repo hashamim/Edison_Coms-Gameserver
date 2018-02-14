@@ -12,6 +12,8 @@
 #include <stdio.h>
 //#include <mraa/gpio.h>
 #include <signal.h>
+
+char* testServerIp = "52.37.92.22";
              /*
   Players:
   0: killer
@@ -279,16 +281,17 @@ int main(int argc, char *argv[]){    //  ./gameplay  blue webcam ip  blue webcam
   int i;
   for(i=0;i<numplayers;i++){
     //connect to webcam
-    printf("Enter webcam ip for %s: ",player_colors[i]);
-    scanf("%31s",ipbuf);
-    players[i].webcam_ip =strdup(ipbuf);
+   
+    //printf("Enter webcam ip for %s: ",player_colors[i]);
+    //scanf("%31s",ipbuf);
+    players[i].webcam_ip = testServerIp;//strdup(ipbuf);
     printf("Enter webcam port number for %s: ", player_colors[i]);
     scanf("%7s",portbuf);
     players[i].webcam_socket_fd = connectToHost(players[i].webcam_ip,&portbuf[0]);
     //connect to imu
-    printf("Enter imu ip for %s: ",player_colors[i]);
-    scanf("%31s",ipbuf);
-    players[i].imu_ip =strdup(ipbuf);
+    //printf("Enter imu ip for %s: ",player_colors[i]);
+    //scanf("%31s",ipbuf);
+    players[i].imu_ip = testServerIp;//strdup(ipbuf);
     printf("Enter imu port number for %s: ", player_colors[i]);
     scanf("%7s",portbuf);
     players[i].imu_socket_fd = connectToHost(players[i].imu_ip,&portbuf[0]);
@@ -311,6 +314,7 @@ printf("connected to ip: %s with portno %s \n", argv[9], argv[10]);
 printf("connected to ip: %s with portno %s\n",argv[11], argv[12]);
 printf("Connected!\n");
   */
+
 	struct pollfd webcampoll[2], imupoll[2];
 	webcampoll[BLUE].fd = players[BLUE].webcam_socket_fd;
 	webcampoll[RED].fd = players[RED].webcam_socket_fd;
