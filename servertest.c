@@ -53,10 +53,10 @@ int main(int argc, char * argv[]){ //usage bluewebcamfdportno blueimufdportno re
 	int imufd[3];
 	webcamfd[BLUE] = hostConnection(argv[1]);//open("blue.txt",O_WRONLY|O_CREAT, 0660);
 	imufd[BLUE] = hostConnection(argv[2]);//open("blue.txt",O_WRONLY|O_CREAT, 0660);
-	//webcamfd[RED] = hostConnection(argv[3]);//open("red.txt",O_WRONLY|O_CREAT, 0660); 
-	//imufd[RED] = hostConnection(argv[4]);//open("red.txt",O_WRONLY|O_CREAT, 0660);
-	//webcamfd[PURPLE] = hostConnection(argv[5]);//open("purp.txt",O_WRONLY|O_CREAT, 0660);
-	//imufd[PURPLE] = hostConnection(argv[6]);//open("purp.txt",O_WRONLY|O_CREAT, 0660); 
+	webcamfd[RED] = hostConnection(argv[3]);//open("red.txt",O_WRONLY|O_CREAT, 0660); 
+	imufd[RED] = hostConnection(argv[4]);//open("red.txt",O_WRONLY|O_CREAT, 0660);
+	webcamfd[PURPLE] = hostConnection(argv[5]);//open("purp.txt",O_WRONLY|O_CREAT, 0660);
+	 imufd[PURPLE] = hostConnection(argv[6]);//open("purp.txt",O_WRONLY|O_CREAT, 0660); 
 	
 	char player;
 	char target;
