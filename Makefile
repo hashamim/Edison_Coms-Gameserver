@@ -2,7 +2,7 @@ comm_test: comm_test.c player_comm.c player_comm.h
 	gcc -g -o comm_test comm_test.c player_comm.c
 
 #turn #include <mraa/gpio.h> into #include "mraa/gpio.h"
-game_test: gameplay.c player_comm.c player_comm.h
+game_test: gameplaytest.c player_comm.c player_comm.h
 	gcc -g -o game_test gameplaytest.c player_comm.c
 servertest: servertest.c player_comm.c player_comm.h
 	gcc -g -o testserver servertest.c player_comm.c
