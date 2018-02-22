@@ -270,7 +270,7 @@ int main(int argc, char *argv[]){    //  ./gameplay  blue webcam ip  blue webcam
 	//button = mraa_gpio_init(BUTTON); 
  //mraa_gpio_dir(button,MRAA_GPIO_IN);
   //new usage: ./a.out [number_of_players]
-  /*
+  
   char ipbuf[32];
   char portbuf[8];
   int numplayers = atoi(argv[1]);
@@ -281,22 +281,29 @@ int main(int argc, char *argv[]){    //  ./gameplay  blue webcam ip  blue webcam
   int i;
   for(i=0;i<numplayers;i++){
     //connect to webcam
-   
-    //printf("Enter webcam ip for %s: ",player_colors[i]);
-    //scanf("%31s",ipbuf);
-    players[i].webcam_ip = testServerIp;//strdup(ipbuf);
-    printf("Enter webcam port number for %s: ", player_colors[i]);
-    scanf("%7s",portbuf);
-    players[i].webcam_socket_fd = connectToHost(players[i].webcam_ip,&portbuf[0]);
+    do{
+      printf("Enter webcam ip for %s: ",player_colors[i]);
+      scanf("%31s",ipbuf);
+      players[i].webcam_ip = strdup(ipbuf);
+      printf("Enter webcam port number for %s: ", player_colors[i]);
+      scanf("%7s",portbuf);
+      players[i].webcam_socket_fd = connectToHost(players[i].webcam_ip,&portbuf[0]);
+      if(players[i].webcam_socket_fd < 0)
+        printf("Unsuccessfully connected to %s webcam\n", player_colors[i]);
+    }while(players[i].webcam_socket_fd < 0);
     //connect to imu
-    //printf("Enter imu ip for %s: ",player_colors[i]);
-    //scanf("%31s",ipbuf);
-    players[i].imu_ip = testServerIp;//strdup(ipbuf);
-    printf("Enter imu port number for %s: ", player_colors[i]);
-    scanf("%7s",portbuf);
-    players[i].imu_socket_fd = connectToHost(players[i].imu_ip,&portbuf[0]);
+    do{
+      printf("Enter imu ip for %s: ",player_colors[i]);
+      scanf("%31s",ipbuf);
+      players[i].imu_ip = strdup(ipbuf);
+      printf("Enter imu port number for %s: ", player_colors[i]);
+      scanf("%7s",portbuf);
+      players[i].imu_socket_fd = connectToHost(players[i].webcam_ip,&portbuf[0]);
+      if(players[i].imu_socket_fd < 0)
+        printf("Unsuccessfully connected to %s imu\n", player_colors[i]);
+    }while(players[i].imu_socket_fd < 0);
   }
-  */
+  /*
   players[BLUE].webcam_socket_fd = connectToHost(argv[1],argv[2]);
   printf("connected to ip: %s with portno %s\n",argv[1], argv[2]);
   sleep(1);
@@ -313,7 +320,7 @@ int main(int argc, char *argv[]){    //  ./gameplay  blue webcam ip  blue webcam
   players[PURPLE].imu_socket_fd = connectToHost(argv[11],argv[12]);
   printf("connected to ip: %s with portno %s\n",argv[11], argv[12]);
   printf("Connected!\n");
-  
+  */
 
 	struct pollfd webcampoll[3], imupoll[3];
 	webcampoll[BLUE].fd = players[BLUE].webcam_socket_fd;
