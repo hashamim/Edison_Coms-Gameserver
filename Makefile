@@ -12,3 +12,4 @@ game_server: gameplay.c player_comm.c player_comm.h
 
 rmout:
 	rm -f  purp.txt red.txt blue.txt
+
